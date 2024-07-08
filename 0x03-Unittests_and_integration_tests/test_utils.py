@@ -10,6 +10,7 @@ from parameterized import parameterized
 
 class TestAccessNestedMap(unittest.TestCase):
     """Test cases for access_nested_map"""
+
     @parameterized.expand([
         {"nested_map": {"a": 1}, "path": ("a",)},
         {"nested_map": {"a": {"b": 2}}, "path": ("a",)},
