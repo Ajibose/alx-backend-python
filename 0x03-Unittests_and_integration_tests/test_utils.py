@@ -47,14 +47,18 @@ class TestMemoize(unittest.TestCase):
     """TestCase for utils.memoize decorator"""
     def test_memoize(self):
         class TestClass:
+            """Test class for testing memoize decorator"""
             def a_method(self):
+                """Example method returning a constant value."""
                 return 42
 
             @memoize
             def a_property(self):
+                """Memoized property using the memoize decorator."""
                 return self.a_method()
 
-        with patch.object(TestClass, 'a_method', return_value=42) as mocked_method:
+        with patch.object(
+                TestClass, 'a_method', return_value=42) as mocked_method:
             instance = TestClass()
             val = instance.a_property
             self.assertEqual(val, 42)
