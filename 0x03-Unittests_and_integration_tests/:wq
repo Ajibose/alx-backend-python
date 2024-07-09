@@ -34,20 +34,23 @@ class TestGithubOrgClient(unittest.TestCase):
         val = instance._public_repos_url
         self.assertEqual(val, payload["repos_url"])
 
-    @patch('client.get_json')
-    @patch.object(
-            GithubOrgClient, '_public_repos_url', new_callable=PropertyMock)
-    def test_public_repos(self, mocked_prop, mocked_get_json):
+    @patch(client.get_json)
+    @patch(GithubOrgClient, _public_repos_url, new_callable=PropertyMock)
+    def test_public_repos(self, mocked_get_json, mocked_prop):
         """Test case for public_repos method"""
         mocked_prop.return_value = "https://github.com/Ajibose/alx-backend.git"
-        mocked_get_json.return_value = [
-            {"name": "test"},
-            {"name": "dart"}
-        ]
+        mocked_get_json.return_value = {
+            {"name": "unittest"},
+            {"name": "log_parsing"},
+            {"name": "redis"}
+        }
 
-        instance = GithubOrgClient("https://api.github.com/orgs/google")
+        instance = GithubOrgClient(name)
         public_repos = instance.public_repos()
-        self.assertEqual(["test", "dart"], public_repos)
+        self.assertEqual(["unittest", "log_parsing", "redis"], public_repos)
+        
+
+
 
 
 if __name__ == '__main__':
