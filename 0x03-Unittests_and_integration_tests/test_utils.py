@@ -46,6 +46,7 @@ class TestGetJson(unittest.TestCase):
 class TestMemoize(unittest.TestCase):
     """TestCase for utils.memoize decorator"""
     def test_memoize(self):
+        """Test the memoize decorator"""
         class TestClass:
             """Test class for testing memoize decorator"""
             def a_method(self):
