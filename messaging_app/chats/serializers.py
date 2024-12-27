@@ -14,13 +14,24 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ConversationSerializer(serializers.ModelSerializer):
     participants_id = UserSerializer(many=True)
+    messages = serializers.SerializerMethodField()
 
     class Meta:
         model = Conversation
         fields = ['conversation_id', 'participants_id', 'created_at']
 
+    def get_messages(self, obj):
+        messages = Message.objects.filter(conversation=obj)
+        return MessageSerializer(messages, many=True).data
+
+    def validate(self, data):
+        if len(data.get('participants', [])) < 2:
+            raise serializers.ValidationError("A conversation must have at least two participants.")
+
+        return data
+
 class MessageSerializer(serializers.ModelSerializer):
-    sender_id = serializers.StringRelatedField()
+    sender_id = serializers.CharField(source='sender_id.user_id', read_only=True)
 
     class Meta:
         model = Message
