@@ -29,5 +29,5 @@ class Message:
     message_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     sender_id = models.ForeignKey(User, related_name='sent_messages')
     message_body = models.TextField(null=False)
-    send_at = models.DateTimeField(auto_now_add=True)
+    sent_at = models.DateTimeField(auto_now_add=True)
 
