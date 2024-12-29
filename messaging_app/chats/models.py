@@ -20,14 +20,14 @@ class User(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
-class Conversation:
+class Conversation(models.Model):
     conversation_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    participants_id = models.ManyToMany(User, related_name='conversations')
+    participants_id = models.ManyToManyField(User, related_name='conversations')
     created_at = models.DateTimeField(auto_now_add=True)
 
-class Message:
+class Message(models.Model):
     message_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    sender_id = models.ForeignKey(User, related_name='sent_messages')
+    sender_id = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='sent_messages')
     message_body = models.TextField(null=False)
     sent_at = models.DateTimeField(auto_now_add=True)
 

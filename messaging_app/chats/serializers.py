@@ -8,25 +8,33 @@ class UserSerializer(serializers.ModelSerializer):
         fields = [
                 'user_id', 'first_name',
                 'last_name', 'email',
-                'password_hash', 'phone_number',
+                'password', 'phone_number',
                 'role', 'created_at'
         ]
 
 class ConversationSerializer(serializers.ModelSerializer):
-    participants_id = UserSerializer(many=True)
+    participants_id = serializers.PrimaryKeyRelatedField(
+            many=True, queryset=User.objects.all()
+    )
     messages = serializers.SerializerMethodField()
 
     class Meta:
         model = Conversation
-        fields = ['conversation_id', 'participants_id', 'created_at']
+        fields = ['conversation_id', 'participants_id', 'messages', `'created_at',]
 
     def get_messages(self, obj):
-        messages = Message.objects.filter(conversation=obj)
+        messages = Message.objects.filter(sender_id__in=obj.participants_id.all())
         return MessageSerializer(messages, many=True).data
 
     def validate(self, data):
-        if len(data.get('participants', [])) < 2:
-            raise serializers.ValidationError("A conversation must have at least two participants.")
+        participants_id = data.get('participants_id', [])
+
+        if len(data.get('participants_id', [])) < 2:
+            raise serializers.ValidationError("A conversation must have at least tiwo participants.")
+
+        participants = User.objects.filter(user_id__in=participants_id)
+        if len(participants) != len(participants_id):
+            raise serializers.ValidationError("One or more participant IDs are invalid.")
 
         return data
 
