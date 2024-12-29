@@ -20,7 +20,7 @@ class ConversationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Conversation
-        fields = ['conversation_id', 'participants_id', 'messages', `'created_at',]
+        fields = ['conversation_id', 'participants_id', 'messages', 'created_at']
 
     def get_messages(self, obj):
         messages = Message.objects.filter(sender_id__in=obj.participants_id.all())

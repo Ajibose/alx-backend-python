@@ -1,7 +1,7 @@
 import uuid
 from rest_framework import viewsets
 from .models import Message, Conversation
-from .serializers import MessageSerializer, Converserialzer
+from .serializers import MessageSerializer, ConversationSerializer
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 # Create your views here.
@@ -54,8 +54,8 @@ class MessageViewSet(viewsets.ModelViewSet):
                 uuid_obj = uuid.UUID(message_id, version=4)
             except ValueError:
                 Response(
-                        {"error": "Invalid conversation_id. It must be a valid UUID"}
-                        status: status.HTTP_400_BAD_REQUEST
+                        {"error": "Invalid conversation_id. It must be a valid UUID"},
+                        status=status.HTTP_400_BAD_REQUEST
                 )
 
             if Message.objects.filter(message_id=message_id).exists:
@@ -64,10 +64,10 @@ class MessageViewSet(viewsets.ModelViewSet):
                         status=status.HTTP_400_BAD_REQUEST 
                 )
 
-        if (!data.get('message_body') or data.get('message_body') == ""):
+        if (not data.get('message_body') or data.get('message_body') == ""):
             return Response(
-                    {"error": "Message body must be provided and not empty"}
-                    status: status.HTTP_400_BAD_REQUEST
+                    {"error": "Message body must be provided and not empty"},
+                    status=status.HTTP_400_BAD_REQUEST
             )
 
         data.sender_id = request.user.user_id

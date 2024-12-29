@@ -21,6 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-687@=4yn1&j$i%-%!5h^aa5wogci#9z%riczy+c3&9g55b2f2j'
+AUTH_USER_MODEL = 'chats.User'
+LOGIN_REDIRECT_URL = '/api'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django_filters',
     'chats',
 ]
 
