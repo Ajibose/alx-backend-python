@@ -74,4 +74,13 @@ class OffensiveLanguageMiddleware:
 
 
 class RolepermissionMiddleware:
-    pass
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        user_role = getattr(request.user, 'role', None)
+
+        if user_role not in ['admin', 'moderator']:
+            raise PermissionDenied('You must be an Admin or moderator')
+
+        return self.get_response(request)
