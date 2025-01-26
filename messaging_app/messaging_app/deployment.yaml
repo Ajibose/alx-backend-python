@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-messaging-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-messaging-app
+  template:
+    metadata:
+      labels:
+        app: django-messaging-app
+    spec:
+      containers:
+        - name: django-messaging-app
+          image: <your-docker-image-name>:<tag>  # Replace with your Docker image and tag
+          ports:
+            - containerPort: 8000  # Assuming your Django app runs on port 8000
+          env:
+            - name: DATABASE_URL
+              value: <your-database-url>  # Replace with the environment variables, if any (like DB URL)
+          volumeMounts:
+            - name: django-volume
+              mountPath: /app  # Mount path in your container
+      volumes:
+        - name: django-volume
+          emptyDir: {}  # Use this volume for temporary data storage
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-messaging-service
+spec:
+  selector:
+    app: django-messaging-app
+  ports:
+    - protocol: TCP
+      port: 80  # Expose the service on port 80
+      targetPort: 8000  # Map it to the Django container's port
+  clusterIP: ClusterIP  # Expose internally within the cluster
+
