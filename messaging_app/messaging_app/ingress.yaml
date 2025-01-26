@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: django-messaging-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: <your-domain-name>  # Replace with your actual domain
+      http:
+        paths:
+        - path: /api/
+          pathType: Prefix
+          backend:
+            service:
+              name: django-messaging-service  # Replace with your Django service name
+              port:
+                number: 80
+
