@@ -1,0 +1,9 @@
+#!/bin/bash
+
+kubectl apply -f messaging_app/blue_deployment.yaml
+kubectl apply -f messaging_app/green_deployment.yaml
+kubectl apply -f messaging_app/kubeservice.yaml
+
+kubectl patch service django-messaging-service -p '{"spec":{"selector":{"version":"green"}}}'
+kubectl logs -l app=django-messaging,version=green
+
