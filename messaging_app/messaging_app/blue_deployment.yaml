@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: django-messaging
-          image: <blue-django-image>  # Replace with your current Docker image
+          image: <your-django-image>:2.0  # Update the version to 2.0
           ports:
             - containerPort: 8000
 

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+kubectl apply -f messaging_app/blue_deployment.yaml
+
+kubectl rollout status deployment/django-messaging-blue
+
+while true; do
+  curl -s <your-app-url>/api/ > /dev/null
+  if [ $? -ne 0 ]; then
+    echo "App is down, rolling update failed!"
+    exit 1
+  fi
+  sleep 2
+done &
+
+kubectl get pods -l app=django-messaging,version=blue
+
+wait
+
