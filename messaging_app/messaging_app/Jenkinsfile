@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+    environment {
+        GITHUB_CREDENTIALS = credentials('github-credentials') // Use your GitHub credentials ID
+    }
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', 
+                    credentialsId: env.GITHUB_CREDENTIALS, 
+                    url: 'https://github.com/your-repo/messaging-app.git'
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                sh 'pip install -r requirements.txt'
+            }
+        }
+        stage('Run Tests') {
+            steps {
+                sh 'pytest --junitxml=report.xml'
+            }
+        }
+        stage('Publish Test Report') {
+            steps {
+                junit 'report.xml'
+            }
+        }
+    }
+}
+
